@@ -41,7 +41,7 @@
             </div>
             <div>
                 <button class="p-2 bg-green-300 rounded-md" type="submit">
-                    <a href="#" class="w-full h-full block">Submit</a>
+                    Submit
                 </button>
                 <button class="p-2 bg-red-300 rounded-md">
                     <a href="{{ route('index') }}">Back</a>

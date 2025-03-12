@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -35,12 +36,19 @@ class PostController extends Controller
         //
         $request->validate([
             'image' => ['required', 'max:1024'],
-            'name' => ['required', 'max:100'],
+            'title' => ['required', 'max:100'],
             'category_id' => ['required'],
             'description' => ['required'],
         ]);
-        dd('success');
-        // return 'Hello Store';
+        $post = new Post();
+        $fileName = time() . '-' . $request->image->getClientOriginalName();
+        $filePath = $request->image->storeAs('upload',$fileName);
+        $post->title = $request->title;
+        $post->image = $filePath;
+        $post->category_id = $request->category_id;
+        $post->description = $request->description;
+        $post->save();
+        return  redirect()->route('index');
     }
 
     /**
