@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -15,7 +16,8 @@ class PostController extends Controller
     public function index(): View
     {
         //
-        return View('index');
+        $posts = Post::all();
+        return View('index', compact('posts'));
     }
 
     /**
@@ -35,14 +37,14 @@ class PostController extends Controller
     {
         //
         $request->validate([
-            'image' => ['required', 'max:1024'],
+            'image' => ['required', 'max:1024', 'image'],
             'title' => ['required', 'max:100'],
             'category_id' => ['required'],
             'description' => ['required'],
         ]);
         $post = new Post();
         $fileName = time() . '-' . $request->image->getClientOriginalName();
-        $filePath = $request->image->storeAs('upload',$fileName);
+        $filePath = $request->image->storeAs('upload', $fileName);
         $post->title = $request->title;
         $post->image = $filePath;
         $post->category_id = $request->category_id;
@@ -57,6 +59,8 @@ class PostController extends Controller
     public function show(string $id)
     {
         //
+        $post = Post::findOrFail($id);
+        return View('show', compact(['post']));
     }
 
     /**
@@ -65,6 +69,9 @@ class PostController extends Controller
     public function edit(string $id)
     {
         //
+        $post = Post::findOrFail($id);
+        $categories = Category::all();
+        return View('edit', compact(['post', 'categories']));
     }
 
     /**
@@ -73,6 +80,28 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $post = Post::findOrFail($id);
+        $request->validate([
+            'title' => ['required', 'max:100'],
+            'category_id' => ['required'],
+            'description' => ['required'],
+        ]);
+
+        if ($request->hasFile('image')) {
+            $request->validate(([
+                'image' => ['required', 'max:1024', 'image'],
+            ]));
+            $fileName = time() . '-' . $request->image->getClientOriginalName();
+            $filePath = $request->image->storeAs('upload', $fileName);
+            File::delete(public_path($post->image));
+            $post->image = $filePath;
+        }
+
+        $post->title = $request->title;
+        $post->category_id = $request->category_id;
+        $post->description = $request->description;
+        $post->save();
+        return redirect()->route('index');
     }
 
     /**
@@ -81,5 +110,6 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         //
+        dd($id);
     }
 }
