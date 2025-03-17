@@ -28,12 +28,12 @@
                         <td>{{ $loop->index+1 }}</td>
                         <td>
                             <div class="flex w-full justify-center">
-                                <img src="{{asset($post->image)}}" alt="" height="50" width="50">
+                                <img src="{{asset('images/'.$post->image)}}" alt="" height="50" width="50">
                             </div>
                         </td>
                         <td>{{ $post->title }}</td>
                         <td>{{ $post->description }}</td>
-                        <td>{{ $post->category_id}}</td>
+                        <td>{{ $post->category->name}}</td>
                         {{-- strtotime ==> parse timestamp --}}
                         <td>{{ date('d-m-Y', strtotime($post->created_at)) }}</td>
                         <td>
@@ -52,5 +52,6 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $posts->links() }}
     </div>
 @endsection

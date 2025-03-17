@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index(): View
     {
         //
-        $posts = Post::all();
+        $posts = Post::paginate(5);
         return View('index', compact('posts'));
     }
 
@@ -110,6 +110,12 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         //
-        dd($id);
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return redirect()->route('index');        
+    }
+
+    public function trashed() {
+        return 'hello';
     }
 }
