@@ -1,0 +1,21 @@
+# Thư mục Laravel auto-gen hoặc nặng
+vendor
+node_modules
+storage/*.key
+storage/*.log
+storage/framework/*
+storage/logs/*
+bootstrap/cache/*
+
+# File hệ thống, Git
+.git
+.gitignore
+.env
+*.log
+.DS_Store
+
+# File IDE
+*.swp
+*.swo
+*.bak
+*.tmp
