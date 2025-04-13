@@ -1,23 +1,22 @@
-# Stage 1: Composer
-FROM composer:2 AS composer
+FROM php:8.2-alpine
 
-# Stage 2: Laravel App
-FROM php:8.2-alpine AS build
-
-RUN apk update && apk upgrade --no-cache
-RUN apk add --no-cache \
+RUN apk update && apk upgrade --no-cache && apk add --no-cache \
     bash git curl unzip \
-    libpng-dev libjpeg-turbo-dev libzip-dev oniguruma-dev
+    libpng-dev libjpeg-turbo-dev libzip-dev oniguruma-dev icu-dev zlib-dev \
+    php82-pecl-xdebug \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath intl
 
-RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+WORKDIR /crud_laravel
 
-WORKDIR /var/www
-# COPY . .
+COPY . .
 
-RUN composer install --optimize-autoloader --no-dev \
- && php artisan config:cache 
- 
+RUN composer install --no-dev --no-interaction --optimize-autoloader
+
+# Tạo các thư mục cần thiết và đặt quyền ghi cho storage và bootstrap/cache
+RUN mkdir -p storage/framework/cache/data && \
+    chmod -R 777 storage bootstrap/cache
+
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

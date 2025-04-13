@@ -18,10 +18,10 @@ class PostController extends Controller
     {
         //
         // $posts = Post::paginate(5);
-        $posts = Cache::remember('posts', 30, function () {
-            return Post::with('category')->paginate(5);
-        });
-        return View('index', compact('posts'));
+        // $posts = Cache::remember('posts', 30, function () {
+        //     return Post::with('category')->paginate(5);
+        // });
+        return View('index');
     }
 
     /**

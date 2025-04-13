@@ -1,21 +1,33 @@
-# Thư mục Laravel auto-gen hoặc nặng
-vendor
+# Laravel auto-generated or heavy directories
 node_modules
-storage/*.key
-storage/*.log
-storage/framework/*
-storage/logs/*
+vendor
+storage/*
 bootstrap/cache/*
+*.log
+.git
+*.tar
+*.gz
+*.zip
 
-# File hệ thống, Git
+
+# System and Git files
 .git
 .gitignore
-.env
 *.log
 .DS_Store
+.dockerignore
+Dockerfile
+docker-compose
 
-# File IDE
-*.swp
-*.swo
-*.bak
-*.tmp
+# app
+# bootstrap
+# config
+# database
+# public/images
+# public/style
+# public/images
+
+# resource
+# routes
+# tests
+

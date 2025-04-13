@@ -14,7 +14,7 @@ Route::post('{id}', [PostController::class, 'update'])->name('update');
 Route::delete('{db}', [PostController::class, 'destroy'])->name('destroy');
 Route::get('trashed',[PostController::class,'trashed'])->name('trashed');
 Route::resource('/', PostController::class);
-Route::get('/',[PostController::class,'index'])->middleware([First::class, TerminatingMiddleware::class])->name('index');
+Route::get('/',[PostController::class,'index'])->name('index');
 Route::get('comp',function(){
     $posts = Post::all();
     return View('comp',compact(['posts']));
